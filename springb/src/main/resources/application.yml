@@ -1,0 +1,81 @@
+# 本地密钥请写在 application-local.yml（已被 .gitignore 忽略），或用环境变量覆盖。
+# 复制 application-local.yml.example 为 application-local.yml 后填入真实值。
+spring.config.import: optional:classpath:application-local.yml
+
+server:
+  port: 1907
+
+jwt:
+  # JWT_SECRET: 签名密钥，生产环境请换成足够长的随机值
+  secret: ${JWT_SECRET:your_jwt_secret_here}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+spring:
+  # 数据库配置
+  # MYSQL_USER / MYSQL_PASSWORD / MYSQL_HOST / MYSQL_PORT / MYSQL_DB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:your_mysql_password}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:skin}?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+
+  # 文件上传配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 1000MB
+
+app:
+  multipart:
+    # 批量图片转视频每张图片都是一个 multipart part，500张图片需要高于默认值
+    max-part-count: 1200
+
+# 配置mybatis实体和xml映射
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+# 自定义配置 - 文件上传
+file:
+  upload:
+    path: uploads/
+  access:
+    url: http://localhost:1907/files/
+
+# 数据集根目录（可选，用于自动查找对应图像）
+dataset:
+  root: ${DATASET_ROOT:}
+
+# Python检测服务配置
+python:
+  detect:
+    url: http://localhost:2026
+  video-convert:
+    url: http://localhost:2026
+
+# AI大模型API配置（通过环境变量传入，不要把真实 Key 写进仓库）
+# DEEPSEEK_API_KEY / GLM_API_KEY / KIMI_API_KEY
+ai:
+  models:
+    deepseek:
+      api-key: ${DEEPSEEK_API_KEY:your_deepseek_api_key}
+      endpoint: https://api.deepseek.com/v1/chat/completions
+      model-name: deepseek-chat
+    glm:
+      api-key: ${GLM_API_KEY:your_glm_api_key}
+      endpoint: https://open.bigmodel.cn/api/paas/v4/chat/completions
+      model-name: glm-4
+    kimi:
+      api-key: ${KIMI_API_KEY:your_kimi_api_key}
+      endpoint: https://api.moonshot.cn/v1/chat/completions
+      model-name: moonshot-v1-8k
+
+# 飞书应用配置（用于上传文件到云文档）
+# FEISHU_APP_ID / FEISHU_APP_SECRET / FEISHU_PARENT_NODE
+feishu:
+  app-id: ${FEISHU_APP_ID:your_feishu_app_id}
+  app-secret: ${FEISHU_APP_SECRET:your_feishu_app_secret}
+  parent-node: ${FEISHU_PARENT_NODE:}

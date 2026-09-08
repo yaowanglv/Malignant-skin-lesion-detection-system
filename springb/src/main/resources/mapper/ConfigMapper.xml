@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springb.mapper.ConfigMapper">
+
+    <resultMap id="ModelConfigResultMap" type="com.example.springb.entity.ModelConfig">
+        <id column="id" property="id"/>
+        <result column="page_type" property="pageType"/>
+        <result column="folder_path" property="folderPath"/>
+        <result column="display_name" property="displayName"/>
+        <result column="model_name" property="modelName"/>
+        <result column="model_path" property="modelPath"/>
+        <result column="model_type" property="modelType"/>
+        <result column="is_active" property="isActive"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <resultMap id="SystemConfigResultMap" type="com.example.springb.entity.SystemConfig">
+        <id column="id" property="id"/>
+        <result column="config_key" property="configKey"/>
+        <result column="config_value" property="configValue"/>
+        <result column="description" property="description"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="selectModelsByPageType" resultMap="ModelConfigResultMap">
+        SELECT *
+        FROM model_config
+        WHERE page_type = #{pageType}
+          AND is_active = 1
+        ORDER BY updated_at DESC, id DESC
+    </select>
+
+    <select id="selectModelByPageTypeAndPath" resultMap="ModelConfigResultMap">
+        SELECT *
+        FROM model_config
+        WHERE page_type = #{pageType}
+          AND model_path = #{modelPath}
+        LIMIT 1
+    </select>
+
+    <insert id="insertModel" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO model_config (
+            page_type, folder_path, display_name, model_name, model_path, model_type, is_active
+        )
+        VALUES (
+            #{pageType}, #{folderPath}, #{displayName}, #{modelName}, #{modelPath}, #{modelType}, #{isActive}
+        )
+    </insert>
+
+    <update id="updateModel">
+        UPDATE model_config
+        SET folder_path = #{folderPath},
+            display_name = #{displayName},
+            model_name = #{modelName},
+            model_type = #{modelType},
+            is_active = #{isActive},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <insert id="upsertConfig">
+        INSERT INTO system_config (config_key, config_value, description)
+        VALUES (#{key}, #{value}, #{description})
+        ON DUPLICATE KEY UPDATE
+            config_value = VALUES(config_value),
+            description = VALUES(description),
+            updated_at = NOW()
+    </insert>
+
+    <select id="selectAllConfigs" resultMap="SystemConfigResultMap">
+        SELECT *
+        FROM system_config
+        ORDER BY config_key ASC
+    </select>
+</mapper>

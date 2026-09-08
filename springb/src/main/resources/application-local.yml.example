@@ -1,0 +1,26 @@
+# 复制本文件为 application-local.yml，填入本地真实值。
+# application-local.yml 已被根目录 .gitignore 忽略，不要提交到 Git。
+
+spring:
+  datasource:
+    username: root
+    password: your_mysql_password
+    # url 一般不用改；如需换主机/库名，取消下面注释：
+    # url: jdbc:mysql://localhost:3306/skin?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+
+jwt:
+  secret: your_jwt_secret_here
+
+ai:
+  models:
+    deepseek:
+      api-key: your_deepseek_api_key
+    glm:
+      api-key: your_glm_api_key
+    kimi:
+      api-key: your_kimi_api_key
+
+feishu:
+  app-id: your_feishu_app_id
+  app-secret: your_feishu_app_secret
+  parent-node: your_feishu_folder_token
