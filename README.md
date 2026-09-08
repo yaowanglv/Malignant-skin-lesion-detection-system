@@ -34,6 +34,61 @@
 - Python 3.10（检测服务与 conda 环境 `v11dmt` 对齐）
 - 可选：NVIDIA GPU + CUDA 12.1（与 `torch==2.2.2+cu121` 一致）
 
+## 数据集下载与放置
+
+数据集不进 Git，请单独下载后放到本机固定目录。本仓库默认读取：
+
+`D:\opendataset\skin\---.v1i.yolov8`
+
+### 网盘
+
+夸克网盘分享「skin.zip」：
+
+- 链接：https://pan.quark.cn/s/0f5324d8ee61?pwd=z8WP
+- 提取码：`z8WP`
+
+也可在夸克 APP 中打开整段分享：`/~0c143akab7~:/`
+
+### 解压后应形成的目录
+
+把 `skin.zip` 解压到 `D:\opendataset\`，最终应对齐下面结构（共 3296 张图，YOLOv8 标注，2 类）：
+
+```
+D:\opendataset\skin\
+└── ---.v1i.yolov8\
+    ├── data.yaml
+    ├── README.dataset.txt
+    ├── README.roboflow.txt
+    ├── train\
+    │   ├── images\          2307 张
+    │   └── labels\          2307 个
+    ├── valid\
+    │   ├── images\          659 张
+    │   └── labels\          659 个
+    └── test\
+        ├── images\          330 张
+        └── labels\          330 个
+```
+
+`data.yaml` 类别：
+
+- `0`：`Benign-skin-cancer`（良性皮肤肿瘤）
+- `1`：`Malignant-skin-cancer`（恶性皮肤癌）
+
+对应关系：
+
+| 内容 | 本地路径 |
+|---|---|
+| 数据集根目录 | `D:\opendataset\skin` |
+| YOLO 数据配置 | `D:\opendataset\skin\---.v1i.yolov8\data.yaml` |
+| 训练集图像 / 标签 | `---.v1i.yolov8\train\images`、`train\labels` |
+| 验证集图像 / 标签 | `---.v1i.yolov8\valid\images`、`valid\labels` |
+| 测试集图像 / 标签 | `---.v1i.yolov8\test\images`、`test\labels` |
+
+后端可选配置 `dataset.root` / 环境变量 `DATASET_ROOT`，默认指向该 YOLO 目录。检测推理用的是仓库内 `detect_service/models/` 权重，不依赖把数据集提交进 Git。
+
+若解压后多了一层 `skin` 或少了 `---.v1i.yolov8`，请按上表挪到对应位置，不要改文件夹名。
+
 ## 1. 初始化数据库
 
 在 MySQL 中按序号执行 `sql/`：

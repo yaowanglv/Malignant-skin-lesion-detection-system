@@ -8,6 +8,10 @@ spring:
     # url 一般不用改；如需换主机/库名，取消下面注释：
     # url: jdbc:mysql://localhost:3306/skin?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
 
+# 数据集目录（可选）。默认已是 D:/opendataset/skin/---.v1i.yolov8
+# dataset:
+#   root: D:/opendataset/skin/---.v1i.yolov8
+
 jwt:
   secret: your_jwt_secret_here
 
